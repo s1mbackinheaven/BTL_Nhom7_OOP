@@ -1,18 +1,18 @@
-package com.example.BTL_Nhom7_OOP.request;
+package com.example.BTL_Nhom7_OOP.dto;
 
 import java.time.LocalDate;
 
-public class PetUpdateRequest {
-    private String id;
+public class PetCreationRequest {
+    private int id;
     private String name,specie;
     private LocalDate birthday;
     private String biography;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

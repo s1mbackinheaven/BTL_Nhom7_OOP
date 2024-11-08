@@ -2,9 +2,9 @@ package com.example.BTL_Nhom7_OOP.service;
 
 
 import com.example.BTL_Nhom7_OOP.entity.Pet;
+import com.example.BTL_Nhom7_OOP.dto.PetCreationRequest;
+import com.example.BTL_Nhom7_OOP.dto.PetUpdateRequest;
 import com.example.BTL_Nhom7_OOP.repository.PetRepository;
-import com.example.BTL_Nhom7_OOP.request.PetCreationRequest;
-import com.example.BTL_Nhom7_OOP.request.PetUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -10,17 +10,17 @@ import java.time.LocalDate;
 @Entity
 public class Pet {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private String name,specie;
     private LocalDate birthday;
     private String biography;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
