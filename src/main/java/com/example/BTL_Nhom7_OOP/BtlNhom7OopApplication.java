@@ -9,9 +9,4 @@ public class BtlNhom7OopApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BtlNhom7OopApplication.class, args);
 	}
-
-	@GetMapping("/hello")
-	public String hello() {
-		return "Hello, World!";
-	}
 }
