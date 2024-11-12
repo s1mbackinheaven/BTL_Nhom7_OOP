@@ -16,24 +16,24 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
     @PostMapping
-    Customer createCustomer(@RequestBody CustomerCreationRequest request){
+    Customer createCustomer(@RequestBody CustomerCreationRequest request){//Thêm khách hàng mới
         return customerService.createCustomer(request);
     }
     @GetMapping
-    List<Customer> getCustomers(){
+    List<Customer> getCustomers(){//Liệt kê thông tin tất cả khách hàng
         return customerService.getCustomers();
     }
     @GetMapping("/{customerId}")
-    Customer getCustomer(@PathVariable("customerId") String customerId){
+    Customer getCustomer(@PathVariable("customerId") long customerId){//Lấy ra thông tin khách hàng bằng id
         return customerService.getCustomer(customerId);
     }
     @PutMapping("/{customerId}")
-    Customer updateCustomer(@PathVariable String customerId, @RequestBody CustomerUpdateRequest request){
+    Customer updateCustomer(@PathVariable long customerId, @RequestBody CustomerUpdateRequest request){//Sửa thông tin khách hàng bằng id
         return customerService.updateCustomer(customerId, request);
     }
     @DeleteMapping("/{customerId}")
-    String deleteCustomer(@PathVariable String customerId){
+    String deleteCustomer(@PathVariable long customerId){//Xóa khách hàng bằng id
         customerService.deleteCustomer((customerId));
-        return "Customer has been deleted";
+        return "Đã xóa thành công khách hàng với ID: " + customerId;
     }
 }

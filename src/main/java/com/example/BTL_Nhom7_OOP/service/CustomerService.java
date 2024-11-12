@@ -14,7 +14,7 @@ import java.util.List;
 public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
-    public Customer createCustomer(CustomerCreationRequest request){
+    public Customer createCustomer(CustomerCreationRequest request){//Thêm khách hàng mới
         Customer customer;
         customer=new Customer();
         customer.setFirstName(request.getFirstName());
@@ -25,10 +25,10 @@ public class CustomerService {
         customer.setBirthday(request.getBirthday());
         return customerRepository.save(customer);
     }
-    public void deleteCustomer(String customerId){
-        customerRepository.deleteById(customerId);
+    public void deleteCustomer(long customerId){//Xóa khách hàng bằng id
+        customerRepository.deleteById(String.valueOf(customerId));
     }
-    public Customer updateCustomer(String customerId, CustomerUpdateRequest request){
+    public Customer updateCustomer(long customerId, CustomerUpdateRequest request){//Sửa thông tin khách hàng bằng id
         Customer customer=getCustomer(customerId);
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
@@ -38,10 +38,10 @@ public class CustomerService {
         customer.setBirthday(request.getBirthday());
         return customerRepository.save(customer);
     }
-    public List<Customer> getCustomers(){
+    public List<Customer> getCustomers(){//Liệt kê thông tin tất cả khách hàng
         return customerRepository.findAll();
     }
-    public Customer getCustomer(String id){
-        return customerRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public Customer getCustomer(long id){//Lấy ra thông tin khách hàng bằng id
+        return customerRepository.findById(String.valueOf(id)).orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 public class PetService {
     @Autowired
     private PetRepository petRepository;
-    public Pet createPet(PetCreationRequest request){
+    public Pet createPet(PetCreationRequest request){//Thêm thú cưng mới của người dùng
         Pet pet;
         pet=new Pet();
         pet.setName(request.getName());
@@ -23,10 +23,10 @@ public class PetService {
         pet.setBiography(request.getBiography());
         return petRepository.save(pet);
     }
-    public void deletePet(String petId){
-        petRepository.deleteById(petId);
+    public void deletePet(long petId){//Xóa thú cưng của người dùng bằng id
+        petRepository.deleteById(String.valueOf(petId));
     }
-    public Pet updatePet(String petId, PetUpdateRequest request){
+    public Pet updatePet(long petId, PetUpdateRequest request){//Sửa thông tin thú cưng của người dùng bằng id
         Pet pet=getPet(petId);
         pet.setName(request.getName());
         pet.setSpecie(request.getSpecie());
@@ -34,10 +34,10 @@ public class PetService {
         pet.setBiography(request.getBiography());
         return petRepository.save(pet);
     }
-    public List<Pet> getPets(){
+    public List<Pet> getPets(){//Liệt kê thông tin tất cả thú cưng của người dùng
         return petRepository.findAll();
     }
-    public Pet getPet(String id){
-        return petRepository.findById(id).orElseThrow(() -> new RuntimeException("Pet not found"));
+    public Pet getPet(long id){//Lấy ra thông tin thú cưng của người dùng bằng id
+        return petRepository.findById(String.valueOf(id)).orElseThrow(() -> new RuntimeException("Pet not found"));
     }
 }
