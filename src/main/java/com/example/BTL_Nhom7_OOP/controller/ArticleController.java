@@ -1,6 +1,6 @@
 package com.example.BTL_Nhom7_OOP.controller;
 
-import com.example.BTL_Nhom7_OOP.entity.Article;
+import com.example.BTL_Nhom7_OOP.dto.ArticleDTO;
 import com.example.BTL_Nhom7_OOP.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,6 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
+
 import java.util.Optional;
 
 @Controller
@@ -28,19 +29,19 @@ public class ArticleController {
     // Hiển thị form tạo bài viết mới
     @GetMapping("/create")
     public String showCreateForm(Model model) {
-        model.addAttribute("article", new Article());
+        model.addAttribute("article", new ArticleDTO());
         return "admin/articles/create";
     }
 
     // Xử lý tạo bài viết mới
     @PostMapping("/create")
-    public String createArticle(@Valid @ModelAttribute("article") Article article,
+    public String createArticle(@Valid @ModelAttribute("article") ArticleDTO articleDTO,
                                 BindingResult result,
                                 RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "admin/articles/create";
         }
-        articleService.createArticle(article);
+        articleService.createArticle(articleDTO);
         redirectAttributes.addFlashAttribute("success", "Bài viết đã được tạo thành công!");
         return "redirect:/admin/articles";
     }
@@ -48,9 +49,9 @@ public class ArticleController {
     // Hiển thị form chỉnh sửa
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable Long id, Model model) {
-        Optional<Article> article = articleService.getArticleById(id);
-        if (article.isPresent()) {
-            model.addAttribute("article", article.get());
+        Optional<ArticleDTO> articleDTO = articleService.getArticleById(id);
+        if (articleDTO.isPresent()) {
+            model.addAttribute("article", articleDTO.get());
             return "admin/articles/edit";
         }
         return "redirect:/admin/articles";
@@ -59,13 +60,13 @@ public class ArticleController {
     // Xử lý cập nhật bài viết
     @PostMapping("/edit/{id}")
     public String updateArticle(@PathVariable Long id,
-                                @Valid @ModelAttribute("article") Article article,
+                                @Valid @ModelAttribute("article") ArticleDTO articleDTO,
                                 BindingResult result,
                                 RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
             return "admin/articles/edit";
         }
-        articleService.updateArticle(id, article);
+        articleService.updateArticle(id, articleDTO);
         redirectAttributes.addFlashAttribute("success", "Bài viết đã được cập nhật thành công!");
         return "redirect:/admin/articles";
     }
