@@ -13,9 +13,6 @@ public class Doctor {
     private String experience;
     private String status;
 
-    @Version
-    private int version;
-
     public Doctor() {
 
     }
@@ -58,13 +55,5 @@ public class Doctor {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public int getVersion() {
-        return version;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
     }
 }

@@ -26,13 +26,13 @@ public class DoctorController {
         doctor.setStatus(doctorRequest.getStatus());
 
         Doctor createdDoctor = doctorService.createDoctor(doctor);
-        return ResponseEntity.ok(convertToDTO(createdDoctor));
+        return ResponseEntity.ok(DoctorDTO.fromEntity(createdDoctor));
     }
 
     @GetMapping("/get_doctor/{id}")
     public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable int id) {
         Doctor doctor = doctorService.getDoctorById(id);
-        return ResponseEntity.ok(convertToDTO(doctor));
+        return ResponseEntity.ok(DoctorDTO.fromEntity(doctor));
     }
 
     @GetMapping("/get_all_doctor")
@@ -40,7 +40,7 @@ public class DoctorController {
         List<Doctor> doctors = doctorService.getAllDoctors();
         List<DoctorDTO> doctorDTOS = new ArrayList<>();
         for (Doctor doctor : doctors) {
-            doctorDTOS.add(convertToDTO(doctor));
+            doctorDTOS.add(DoctorDTO.fromEntity(doctor));
         }
         return ResponseEntity.ok(doctorDTOS);
     }
@@ -53,7 +53,7 @@ public class DoctorController {
         doctor.setExperience(doctorRequest.getExperience());
         doctor.setStatus(doctorRequest.getStatus());
         Doctor newDoctor = doctorService.updateInforDoctor(id, doctor);
-        return ResponseEntity.ok(convertToDTO(newDoctor));
+        return ResponseEntity.ok(DoctorDTO.fromEntity(newDoctor));
     }
 
     @PutMapping("/set_status_doctor/{id}")
@@ -61,23 +61,13 @@ public class DoctorController {
         Doctor doctor = new Doctor();
         doctor.setStatus(doctorRequest.getStatus());
         Doctor newDoctor = doctorService.setStatusDoctor(id, doctor);
-        return ResponseEntity.ok(convertToDTO(newDoctor));
+        return ResponseEntity.ok(DoctorDTO.fromEntity(newDoctor));
     }
 
     @DeleteMapping("/delete_doctor/{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable int id) {
         doctorService.deleteDoctor(id);
         return ResponseEntity.ok("Đã xóa thành công bác sĩ với ID: " + id);
-    }
-
-    private DoctorDTO convertToDTO(Doctor doctor) {
-        return new DoctorDTO(
-                doctor.getId(),
-                doctor.getName(),
-                doctor.getRoom(),
-                doctor.getExperience(),
-                doctor.getStatus()
-        );
     }
 
 }

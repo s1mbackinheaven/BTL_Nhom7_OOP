@@ -1,5 +1,7 @@
 package com.example.BTL_Nhom7_OOP.dto;
 
+import com.example.BTL_Nhom7_OOP.entity.Doctor;
+
 public class DoctorDTO {
     private int id;
 
@@ -54,5 +56,18 @@ public class DoctorDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public static DoctorDTO fromEntity(Doctor doctor) {
+        if (doctor == null) {
+            return null;
+        }
+        return new DoctorDTO(
+                doctor.getId(),
+                doctor.getName(),
+                doctor.getRoom(),
+                doctor.getExperience(),
+                doctor.getStatus()
+        );
     }
 }
