@@ -11,28 +11,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/customers")
+@RequestMapping("/api/customers")
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
+    //Thêm khách hàng mới
     @PostMapping
-    Customer createCustomer(@RequestBody CustomerCreationRequest request){//Thêm khách hàng mới
+    Customer createCustomer(@RequestBody CustomerCreationRequest request){
         return customerService.createCustomer(request);
     }
-    @GetMapping
-    List<Customer> getCustomers(){//Liệt kê thông tin tất cả khách hàng
+    //Liệt kê thông tin tất cả khách hàng
+    @GetMapping("/get_all_customer")
+    List<Customer> getCustomers(){
         return customerService.getCustomers();
     }
-    @GetMapping("/{customerId}")
-    Customer getCustomer(@PathVariable("customerId") long customerId){//Lấy ra thông tin khách hàng bằng id
+    //Lấy ra thông tin khách hàng bằng id
+    @GetMapping("/get_customer/{customerId}")
+    Customer getCustomer(@PathVariable("customerId") long customerId){
         return customerService.getCustomer(customerId);
     }
-    @PutMapping("/{customerId}")
-    Customer updateCustomer(@PathVariable long customerId, @RequestBody CustomerUpdateRequest request){//Sửa thông tin khách hàng bằng id
+    //Sửa thông tin khách hàng bằng id
+    @PutMapping("/update_infor_customer/{customerId}")
+    Customer updateCustomer(@PathVariable long customerId, @RequestBody CustomerUpdateRequest request){
         return customerService.updateCustomer(customerId, request);
     }
-    @DeleteMapping("/{customerId}")
-    String deleteCustomer(@PathVariable long customerId){//Xóa khách hàng bằng id
+    //Xóa khách hàng bằng id
+    @DeleteMapping("/delete_customer/{customerId}")
+    String deleteCustomer(@PathVariable long customerId){
         customerService.deleteCustomer((customerId));
         return "Đã xóa thành công khách hàng với ID: " + customerId;
     }

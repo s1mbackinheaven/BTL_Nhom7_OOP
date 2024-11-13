@@ -4,6 +4,7 @@ package com.example.BTL_Nhom7_OOP.service;
 import com.example.BTL_Nhom7_OOP.dto.CustomerUpdateRequest;
 import com.example.BTL_Nhom7_OOP.entity.Customer;
 import com.example.BTL_Nhom7_OOP.dto.CustomerCreationRequest;
+import com.example.BTL_Nhom7_OOP.exception.ResourceNotFoundException;
 import com.example.BTL_Nhom7_OOP.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
     public void deleteCustomer(long customerId){//Xóa khách hàng bằng id
-        customerRepository.deleteById(String.valueOf(customerId));
+        customerRepository.deleteById(customerId);
     }
     public Customer updateCustomer(long customerId, CustomerUpdateRequest request){//Sửa thông tin khách hàng bằng id
         Customer customer=getCustomer(customerId);
@@ -39,9 +40,10 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
     public List<Customer> getCustomers(){//Liệt kê thông tin tất cả khách hàng
+        if(customerRepository.findAll().isEmpty()) throw new ResourceNotFoundException("Không có khách hàng nào");
         return customerRepository.findAll();
     }
     public Customer getCustomer(long id){//Lấy ra thông tin khách hàng bằng id
-        return customerRepository.findById(String.valueOf(id)).orElseThrow(() -> new RuntimeException("User not found"));
+        return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng"));
     }
 }
