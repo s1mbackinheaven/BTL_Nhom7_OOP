@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Danh sách bài viết</title>
+</head>
+<body>
+<h1>Danh sách bài viết</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Tiêu đề</th>
+        <th>Tác giả</th>
+        <th>Ngày tạo</th>
+        <th>Hành động</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="article : ${articles}">
+        <td th:text="${article.title}">Tiêu đề</td>
+        <td th:text="${article.author}">Tác giả</td>
+        <td th:text="${#dates.format(article.createdAt, 'yyyy-MM-dd')}">Ngày tạo</td>
+        <td>
+            <a th:href="@{/admin/articles/edit/{id}(id=${article.id})}">Chỉnh sửa</a>
+            <form th:action="@{/admin/articles/delete/{id}(id=${article.id})}" method="post" style="display:inline;">
+                <button type="submit">Xóa</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

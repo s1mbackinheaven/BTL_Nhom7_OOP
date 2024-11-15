@@ -3,6 +3,7 @@ package com.example.BTL_Nhom7_OOP.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.Date;
@@ -15,13 +16,13 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Tiêu đề không được để trống")
-    @Size(max = 200, message = "Tiêu đề không được vượt quá 200 ký tự")
-    @Column(nullable = false)
+    @NotNull(message = "Tiêu đề không được để trống")
+    //@Size(max = 200, message = "Tiêu đề không được vượt quá 200 ký tự")
+    //@Column(nullable = false)
     private String title;
 
-    @NotBlank(message = "Nội dung không được để trống")
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @NotNull(message = "Nội dung không được để trống")
+    //@Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Column(length = 100)

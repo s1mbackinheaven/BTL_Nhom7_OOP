@@ -37,8 +37,10 @@ public class ArticleController {
     @PostMapping("/create")
     public String createArticle(@Valid @ModelAttribute("article") ArticleDTO articleDTO,
                                 BindingResult result,
-                                RedirectAttributes redirectAttributes) {
+                                RedirectAttributes redirectAttributes,
+                                Model model) {
         if (result.hasErrors()) {
+            model.addAttribute("article", articleDTO); // Trả lại articleDTO để giữ lại dữ liệu đã nhập
             return "admin/articles/create";
         }
         articleService.createArticle(articleDTO);

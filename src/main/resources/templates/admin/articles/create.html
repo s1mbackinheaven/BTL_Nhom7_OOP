@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tạo Bài Viết Mới</title>
+</head>
+<body>
+<h1>Tạo Bài Viết Mới</h1>
+<form th:action="@{/admin/articles/create}" th:object="${article}" method="post">
+    <div>
+        <label for="title">Tiêu đề:</label>
+        <input type="text" id="title" th:field="*{title}" required />
+    </div>
+    <div>
+        <label for="content">Nội dung:</label>
+        <textarea id="content" th:field="*{content}" required></textarea>
+    </div>
+    <div>
+        <label for="author">Tác giả:</label>
+        <input type="text" id="author" th:field="*{author}" />
+    </div>
+    <div>
+        <label for="category">Chuyên mục:</label>
+        <input type="text" id="category" th:field="*{category}" />
+    </div>
+    <div>
+        <label for="thumbnailUrl">URL Hình ảnh:</label>
+        <input type="text" id="thumbnailUrl" th:field="*{thumbnailUrl}" />
+    </div>
+    <div>
+        <label for="isPublished">Xuất bản:</label>
+        <input type="checkbox" id="isPublished" th:field="*{isPublished}" />
+    </div>
+    <div>
+        <button type="submit">Tạo Bài Viết</button>
+    </div>
+</form>
+</body>
+</html>

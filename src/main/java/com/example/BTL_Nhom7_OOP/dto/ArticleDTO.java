@@ -1,6 +1,7 @@
 package com.example.BTL_Nhom7_OOP.dto;
 
 import java.util.Date;
+import jakarta.validation.constraints.NotNull;
 
 public class ArticleDTO {
     private Long id;
