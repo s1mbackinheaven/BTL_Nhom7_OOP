@@ -1,6 +1,7 @@
 package com.example.BTL_Nhom7_OOP.controller;
 
 
+import com.example.BTL_Nhom7_OOP.dto.ApiResponse;
 import com.example.BTL_Nhom7_OOP.dto.CustomerCreationRequest;
 import com.example.BTL_Nhom7_OOP.dto.CustomerUpdateRequest;
 import com.example.BTL_Nhom7_OOP.entity.Customer;
@@ -17,8 +18,12 @@ public class CustomerController {
     private CustomerService customerService;
     //Thêm khách hàng mới
     @PostMapping
-    Customer createCustomer(@RequestBody CustomerCreationRequest request){
-        return customerService.createCustomer(request);
+    ApiResponse<Customer> createCustomer(@RequestBody CustomerCreationRequest request){
+        ApiResponse<Customer> apiResponse = new ApiResponse<>();
+        apiResponse.setCode(1000);
+        apiResponse.setMessage("Thêm thành công");
+        apiResponse.setResult(customerService.createCustomer(request));
+        return apiResponse;
     }
     //Liệt kê thông tin tất cả khách hàng
     @GetMapping("/get_all_customer")
@@ -32,8 +37,12 @@ public class CustomerController {
     }
     //Sửa thông tin khách hàng bằng id
     @PutMapping("/update_infor_customer/{customerId}")
-    Customer updateCustomer(@PathVariable long customerId, @RequestBody CustomerUpdateRequest request){
-        return customerService.updateCustomer(customerId, request);
+    ApiResponse<Customer> updateCustomer(@PathVariable long customerId, @RequestBody CustomerUpdateRequest request){
+        ApiResponse<Customer> apiResponse = new ApiResponse<>();
+        apiResponse.setCode(1000);
+        apiResponse.setMessage("Sửa thành công");
+        apiResponse.setResult(customerService.updateCustomer(customerId,request));
+        return apiResponse;
     }
     //Xóa khách hàng bằng id
     @DeleteMapping("/delete_customer/{customerId}")
