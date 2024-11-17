@@ -1,5 +1,6 @@
 package com.example.BTL_Nhom7_OOP.dto;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,15 +13,15 @@ public class ArticleDTO {
     private String thumbnailUrl;
     private boolean isPublished;
     private Integer viewCount;
-    private Date createdAt;
-    private Date updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     // Constructor mặc định
     public ArticleDTO() {
     }
 
     // Constructor có tham số
-    public ArticleDTO(Long id, String title, String content, String author, String category, String thumbnailUrl, boolean isPublished, Integer viewCount, Date createdAt, Date updatedAt) {
+    public ArticleDTO(Long id, String title, String content, String author, String category, String thumbnailUrl, boolean isPublished, Integer viewCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -98,19 +99,19 @@ public class ArticleDTO {
         this.viewCount = viewCount;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

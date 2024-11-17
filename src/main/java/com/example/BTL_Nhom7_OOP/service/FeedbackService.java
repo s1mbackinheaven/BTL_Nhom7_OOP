@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,31 +19,62 @@ public class FeedbackService {
     @Autowired
     private ModelMapper modelMapper;
 
+    // CREATE: Tạo fb mới
     public FeedbackDTO createFeedback(FeedbackDTO feedbackDTO) {
         Feedback feedback = modelMapper.map(feedbackDTO, Feedback.class);
-        feedback.setApproved(false); // Default to not approved
-        feedback = feedbackRepository.save(feedback);
-        return modelMapper.map(feedback, FeedbackDTO.class);
+        Feedback savedFeedback = feedbackRepository.save(feedback);
+        return modelMapper.map(savedFeedback, FeedbackDTO.class);
     }
 
+    // READ: Lấy tất cả fb
     public List<FeedbackDTO> getAllFeedbacks() {
-        return feedbackRepository.findAll().stream()
+        List<Feedback> feedbacks = feedbackRepository.findAll();
+        return feedbacks.stream()
                 .map(feedback -> modelMapper.map(feedback, FeedbackDTO.class))
                 .collect(Collectors.toList());
     }
 
+    // READ: Lấy fb theo ID
+    public FeedbackDTO getFeedbackById(Long id) {
+        Optional<Feedback> feedback = feedbackRepository.findById(id);
+        return feedback.map(value -> modelMapper.map(value, FeedbackDTO.class)).orElse(null);
+    }
+
+    // READ: Lấy các fb đã được duyệt
     public List<FeedbackDTO> getApprovedFeedbacks() {
-        return feedbackRepository.findByApproved(true).stream()
+        List<Feedback> feedbacks = feedbackRepository.findByApproved(true);
+        return feedbacks.stream()
                 .map(feedback -> modelMapper.map(feedback, FeedbackDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public void approveFeedback(Long id) {
-        Feedback feedback = feedbackRepository.findById(id).orElseThrow(() -> new RuntimeException("Feedback not found"));
-        feedback.setApproved(true);
-        feedbackRepository.save(feedback);
+    // UPDATE: Cập nhật fb
+    public FeedbackDTO updateFeedback(Long id, FeedbackDTO feedbackDTO) {
+        Optional<Feedback> feedback = feedbackRepository.findById(id);
+        if (feedback.isPresent()) {
+            Feedback existingFeedback = feedback.get();
+            existingFeedback.setUsername(feedbackDTO.getUsername());
+            existingFeedback.setComment(feedbackDTO.getComment());
+            existingFeedback.setRating(feedbackDTO.getRating());
+            existingFeedback.setApproved(feedbackDTO.isApproved());
+            Feedback updatedFeedback = feedbackRepository.save(existingFeedback);
+            return modelMapper.map(updatedFeedback, FeedbackDTO.class);
+        }
+        return null;
     }
 
+
+    // APPROVE: Duyệt fb
+    public void approveFeedback(Long id) {
+        Optional<Feedback> feedback = feedbackRepository.findById(id);
+        if (feedback.isPresent()) {
+            Feedback existingFeedback = feedback.get();
+            existingFeedback.setApproved(true);
+            feedbackRepository.save(existingFeedback);
+        }
+    }
+
+    // DELETE: Xóa fb
     public void deleteFeedback(Long id) {
         feedbackRepository.deleteById(id);
     }

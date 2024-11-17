@@ -1,11 +1,13 @@
 package com.example.BTL_Nhom7_OOP.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -18,11 +20,11 @@ public class Article {
 
     @NotNull(message = "Tiêu đề không được để trống")
     //@Size(max = 200, message = "Tiêu đề không được vượt quá 200 ký tự")
-    //@Column(nullable = false)
+    @Column(nullable = false)
     private String title;
 
     @NotNull(message = "Nội dung không được để trống")
-    //@Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
     @Column(length = 100)
@@ -40,29 +42,37 @@ public class Article {
     @Column(name = "view_count")
     private Integer viewCount = 0;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at", nullable = false, updatable = false)
-    private Date createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "updated_at")
-    private Date updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updatedAt;
 
-    // Constructor mặc định
     public Article() {
     }
 
     // Constructor có tham số
-    public Article(String title, String content, String author, String category) {
+    public Article(String title, String content, String author, String category, String thumbnailUrl) {
         this.title = title;
         this.content = content;
         this.author = author;
         this.category = category;
-        this.createdAt = new Date();
-        this.updatedAt = new Date();
+        this.thumbnailUrl = thumbnailUrl;
+        this.viewCount = 0;
+        this.isPublished = false;
     }
 
-    // Thêm các getter và setter
+    // getter và setter
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -71,7 +81,6 @@ public class Article {
         this.title = title;
     }
 
-    // Getter và Setter cho content
     public String getContent() {
         return content;
     }
@@ -80,7 +89,6 @@ public class Article {
         this.content = content;
     }
 
-    // Getter và Setter cho author
     public String getAuthor() {
         return author;
     }
@@ -121,18 +129,35 @@ public class Article {
         this.viewCount = viewCount;
     }
 
-    // Các getter và setter khác giữ nguyên...
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
     @PrePersist
     protected void onCreate() {
-        createdAt = new Date();
-        updatedAt = new Date();
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+        //System.out.println("Created at: " + createdAt);  // Log giá trị createdAt
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = new Date();
+        updatedAt = LocalDateTime.now();
+        //System.out.println("Updated at: " + updatedAt);  // Log giá trị updatedAt
     }
+
 
     public void incrementViewCount() {
         this.viewCount = (this.viewCount == null ? 1 : this.viewCount + 1);

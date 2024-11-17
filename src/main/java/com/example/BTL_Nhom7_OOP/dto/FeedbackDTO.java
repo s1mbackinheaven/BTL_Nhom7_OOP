@@ -1,11 +1,15 @@
 package com.example.BTL_Nhom7_OOP.dto;
 
+import java.time.LocalDateTime;
+
 public class FeedbackDTO {
     private Long id;
     private String username;
     private String comment;
     private int rating;
     private boolean approved;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public String getUsername() {
         return username;
@@ -45,5 +49,21 @@ public class FeedbackDTO {
 
     public void setApproved(boolean approved) {
         this.approved = approved;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

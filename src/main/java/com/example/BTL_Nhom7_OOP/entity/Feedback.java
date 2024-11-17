@@ -24,8 +24,19 @@ public class Feedback {
     private int rating;
 
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     private boolean approved;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
     public Long getId() {
         return id;

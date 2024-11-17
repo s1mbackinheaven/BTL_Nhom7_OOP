@@ -14,14 +14,21 @@ public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<FeedbackDTO> createFeedback(@RequestBody FeedbackDTO feedbackDTO) {
         return ResponseEntity.ok(feedbackService.createFeedback(feedbackDTO));
     }
 
-    @GetMapping
+    //lấy hết fb
+    @GetMapping("")
     public ResponseEntity<List<FeedbackDTO>> getAllFeedbacks() {
         return ResponseEntity.ok(feedbackService.getAllFeedbacks());
+    }
+
+    //lấy fb theo id
+    @GetMapping("/get_feedback/{id}")
+    public ResponseEntity<FeedbackDTO> getFeedbackById(@PathVariable Long id) {
+        return ResponseEntity.ok(feedbackService.getFeedbackById(id));
     }
 
     @GetMapping("/approved")
@@ -35,6 +42,7 @@ public class FeedbackController {
         return ResponseEntity.ok().build();
     }
 
+    //xoa danh gia
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFeedback(@PathVariable Long id) {
         feedbackService.deleteFeedback(id);

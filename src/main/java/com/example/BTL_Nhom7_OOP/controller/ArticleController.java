@@ -3,98 +3,62 @@ package com.example.BTL_Nhom7_OOP.controller;
 import com.example.BTL_Nhom7_OOP.dto.ArticleDTO;
 import com.example.BTL_Nhom7_OOP.service.ArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 
+import java.util.List;
 import java.util.Optional;
 
-@Controller
-@RequestMapping("/admin/articles")
+@RestController
+@RequestMapping("/api/articles")
 public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
 
-    // Hiển thị danh sách bài viết
+    // Lấy tất cả bài viết
     @GetMapping("")
-    public String listArticles(Model model) {
-        model.addAttribute("articles", articleService.getAllArticles());
-        return "admin/articles/list";
+    public ResponseEntity<List<ArticleDTO>> getAllArticles() {
+        List<ArticleDTO> articles = articleService.getAllArticles();
+        return ResponseEntity.ok(articles);
     }
 
-    // Hiển thị form tạo bài viết mới
-    @GetMapping("/create")
-    public String showCreateForm(Model model) {
-        model.addAttribute("article", new ArticleDTO());
-        return "admin/articles/create";
-    }
-
-    // Xử lý tạo bài viết mới
+    // Tạo bài viết
     @PostMapping("/create")
-    public String createArticle(@Valid @ModelAttribute("article") ArticleDTO articleDTO,
-                                BindingResult result,
-                                RedirectAttributes redirectAttributes,
-                                Model model) {
+    public ResponseEntity<?> createArticle(@Valid @RequestBody ArticleDTO articleDTO, BindingResult result) {
         if (result.hasErrors()) {
-            model.addAttribute("article", articleDTO); // Trả lại articleDTO để giữ lại dữ liệu đã nhập
-            return "admin/articles/create";
+            return ResponseEntity.badRequest().body(result.getAllErrors());
         }
-        articleService.createArticle(articleDTO);
-        redirectAttributes.addFlashAttribute("success", "Bài viết đã được tạo thành công!");
-        return "redirect:/admin/articles";
+        ArticleDTO createdArticle = articleService.createArticle(articleDTO);
+        return ResponseEntity.ok(createdArticle);
     }
 
-    // Hiển thị form chỉnh sửa
-    @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Optional<ArticleDTO> articleDTO = articleService.getArticleById(id);
-        if (articleDTO.isPresent()) {
-            model.addAttribute("article", articleDTO.get());
-            return "admin/articles/edit";
-        }
-        return "redirect:/admin/articles";
+    // Lấy bài viết theo ID
+    @GetMapping("/get_article/{id}")
+    public ResponseEntity<ArticleDTO> getArticleById(@PathVariable Long id) {
+        Optional<ArticleDTO> article = articleService.getArticleById(id);
+        return article.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    // Xử lý cập nhật bài viết
-    @PostMapping("/edit/{id}")
-    public String updateArticle(@PathVariable Long id,
-                                @Valid @ModelAttribute("article") ArticleDTO articleDTO,
-                                BindingResult result,
-                                RedirectAttributes redirectAttributes) {
-        if (result.hasErrors()) {
-            return "admin/articles/edit";
+    // Cập nhật bài viết
+    @PutMapping("/update_article/{id}")
+    public ResponseEntity<?> updateArticle(@PathVariable Long id, @RequestBody ArticleDTO articleDTO) {
+        ArticleDTO updatedArticle = articleService.updateArticle(id, articleDTO);
+        if (updatedArticle != null) {
+            return ResponseEntity.ok(updatedArticle); // trả về đối tượng bài viết đã cập nhật
         }
-        articleService.updateArticle(id, articleDTO);
-        redirectAttributes.addFlashAttribute("success", "Bài viết đã được cập nhật thành công!");
-        return "redirect:/admin/articles";
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không tìm thấy bài viết để cập nhật.");
     }
 
     // Xóa bài viết
-    @PostMapping("/delete/{id}")
-    public String deleteArticle(@PathVariable Long id,
-                                RedirectAttributes redirectAttributes) {
+    @DeleteMapping("/delete_article/{id}")
+    public ResponseEntity<?> deleteArticle(@PathVariable Long id) {
         articleService.deleteArticle(id);
-        redirectAttributes.addFlashAttribute("success", "Bài viết đã được xóa thành công!");
-        return "redirect:/admin/articles";
-    }
-
-    // Tìm kiếm bài viết
-    @GetMapping("/search")
-    public String searchArticles(@RequestParam String keyword, Model model) {
-        model.addAttribute("articles", articleService.searchArticles(keyword));
-        model.addAttribute("keyword", keyword);
-        return "admin/articles/list";
-    }
-
-    // Hiển thị bài viết theo category
-    @GetMapping("/category/{category}")
-    public String getArticlesByCategory(@PathVariable String category, Model model) {
-        model.addAttribute("articles", articleService.getArticlesByCategory(category));
-        model.addAttribute("currentCategory", category);
-        return "admin/articles/list";
+        return ResponseEntity.ok("Bài viết đã được xóa thành công!");
     }
 }
+

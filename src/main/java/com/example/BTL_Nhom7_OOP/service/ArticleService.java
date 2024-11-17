@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +31,9 @@ public class ArticleService {
     // READ: Lấy tất cả bài viết
     public List<ArticleDTO> getAllArticles() {
         List<Article> articles = articleRepository.findAllByOrderByCreatedAtDesc();
+        if (articles.isEmpty()) {
+            return Collections.emptyList(); // Trả về danh sách rỗng nếu không có bài viết
+        }
         return articles.stream()
                 .map(article -> modelMapper.map(article, ArticleDTO.class))
                 .collect(Collectors.toList());
@@ -59,10 +63,16 @@ public class ArticleService {
 
     // DELETE: Xóa bài viết
     public void deleteArticle(Long id) {
-        articleRepository.deleteById(id);
+        Optional<Article> article = articleRepository.findById(id);
+        if (article.isPresent()) {
+            articleRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Bài viết không tồn tại!");
+        }
     }
 
-    // Tìm bài viết theo category
+
+    // Tìm bài viết theo category, chưa dùng đến nhưng có thể cần
     public List<ArticleDTO> getArticlesByCategory(String category) {
         List<Article> articles = articleRepository.findByCategory(category);
         return articles.stream()
@@ -70,7 +80,7 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    // Tìm kiếm bài viết theo từ khóa trong tiêu đề
+    // Tìm kiếm bài viết theo từ khóa trong tiêu đề, chưa dùng đến nhưng có thể cần
     public List<ArticleDTO> searchArticles(String keyword) {
         List<Article> articles = articleRepository.findByTitleContainingIgnoreCase(keyword);
         return articles.stream()
@@ -78,7 +88,7 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    // Lấy các bài viết đã xuất bản
+    // Lấy các bài viết đã xuất bản, chưa dùng đến nhưng có thể cần
     public List<ArticleDTO> getPublishedArticles() {
         List<Article> articles = articleRepository.findByIsPublishedTrue();
         return articles.stream()
