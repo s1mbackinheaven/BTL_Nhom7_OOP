@@ -1,7 +1,7 @@
 package com.example.BTL_Nhom7_OOP.controller;
 
-import com.example.BTL_Nhom7_OOP.dto.AppointmentDTO;
-import com.example.BTL_Nhom7_OOP.dto.AppointmentRequest;
+import com.example.BTL_Nhom7_OOP.dto.response.AppointmentDTO;
+import com.example.BTL_Nhom7_OOP.dto.request.AppointmentRequest;
 import com.example.BTL_Nhom7_OOP.entity.Appointment;
 import com.example.BTL_Nhom7_OOP.entity.Doctor;
 import com.example.BTL_Nhom7_OOP.exception.ResourceNotFoundException;

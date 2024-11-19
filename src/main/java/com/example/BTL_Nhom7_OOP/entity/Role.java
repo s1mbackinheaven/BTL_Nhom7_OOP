@@ -1,17 +1,19 @@
 package com.example.BTL_Nhom7_OOP.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
-public class PermissionGroup {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     private String name;
-    private String description;
+    private String detail;
 
-    public PermissionGroup() {
+    public Role() {
 
     }
 
@@ -31,11 +33,11 @@ public class PermissionGroup {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDetail() {
+        return detail;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDetail(String detail) {
+        this.detail = detail;
     }
 }

@@ -1,6 +1,6 @@
-package com.example.BTL_Nhom7_OOP.dto;
+package com.example.BTL_Nhom7_OOP.dto.request;
 
-public class PermissionGroupRequest {
+public class PermissionRequest {
     private String name;
     private String description;
 

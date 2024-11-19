@@ -1,13 +1,13 @@
-package com.example.BTL_Nhom7_OOP.dto;
+package com.example.BTL_Nhom7_OOP.dto.response;
 
-import com.example.BTL_Nhom7_OOP.entity.PermissionGroup;
+import com.example.BTL_Nhom7_OOP.entity.Permission;
 
-public class PermissionGroupDTO {
+public class PermissionDTO {
     private int id;
     private String name;
     private String description;
 
-    public PermissionGroupDTO(int id, String name, String description) {
+    public PermissionDTO(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -37,11 +37,15 @@ public class PermissionGroupDTO {
         this.description = description;
     }
 
-    public static PermissionGroupDTO fromEntity(PermissionGroup permissionGroup) {
-        return new PermissionGroupDTO(
-                permissionGroup.getId(),
-                permissionGroup.getName(),
-                permissionGroup.getDescription()
+    public static PermissionDTO fromEntity(Permission permission) {
+        if (permission == null) {
+            return null;
+        }
+
+        return new PermissionDTO(
+                permission.getId(),
+                permission.getName(),
+                permission.getDescription()
         );
     }
 }

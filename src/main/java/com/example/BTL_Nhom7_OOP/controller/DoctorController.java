@@ -1,7 +1,7 @@
 package com.example.BTL_Nhom7_OOP.controller;
 
-import com.example.BTL_Nhom7_OOP.dto.DoctorDTO;
-import com.example.BTL_Nhom7_OOP.dto.DoctorRequest;
+import com.example.BTL_Nhom7_OOP.dto.response.DoctorDTO;
+import com.example.BTL_Nhom7_OOP.dto.request.DoctorRequest;
 import com.example.BTL_Nhom7_OOP.entity.Doctor;
 import com.example.BTL_Nhom7_OOP.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;

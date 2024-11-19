@@ -1,13 +1,12 @@
 package com.example.BTL_Nhom7_OOP.service;
 
-import com.example.BTL_Nhom7_OOP.dto.AppointmentDTO;
+import com.example.BTL_Nhom7_OOP.dto.response.AppointmentDTO;
 import com.example.BTL_Nhom7_OOP.entity.Appointment;
 import com.example.BTL_Nhom7_OOP.exception.ResourceNotFoundException;
 import com.example.BTL_Nhom7_OOP.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;

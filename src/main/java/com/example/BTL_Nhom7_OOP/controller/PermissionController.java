@@ -1,7 +1,7 @@
 package com.example.BTL_Nhom7_OOP.controller;
 
-import com.example.BTL_Nhom7_OOP.dto.PermissionDTO;
-import com.example.BTL_Nhom7_OOP.dto.PermissionRequest;
+import com.example.BTL_Nhom7_OOP.dto.response.PermissionDTO;
+import com.example.BTL_Nhom7_OOP.dto.request.PermissionRequest;
 import com.example.BTL_Nhom7_OOP.entity.Permission;
 import com.example.BTL_Nhom7_OOP.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
