@@ -3,17 +3,13 @@ package com.example.BTL_Nhom7_OOP.dto.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserResponse {
-    String id;
-    String username;
-    String firstName;
-    String lastName;
-    LocalDate dob;
+public class UserRoleResponse {
+    int id;
+    UserResponse user;
+    RoleResponse role;
 }

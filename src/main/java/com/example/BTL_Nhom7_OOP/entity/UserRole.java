@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Builder
@@ -13,19 +11,17 @@ import java.util.List;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "role")
-public class Role {
+@Table(name = "user_role")
+public class UserRole {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     int id;
 
-    @Column(name = "name")
-    String name;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    User user;
 
-    @Column(name = "description")
-    String description;
-
-    @OneToMany(mappedBy = "role")
-    List<UserRole> userRoles;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    Role role;
 }

@@ -16,12 +16,10 @@ public enum ErrorCode {
     UNAUTHENTICATED(1006, "Unauthenticated", HttpStatus.UNAUTHORIZED),
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
-    PERMISSION_NOT_EXISTED(1009, "Permission not existed", HttpStatus.NOT_FOUND),
     ROLE_NOT_EXISTED(1010, "Role not existed", HttpStatus.NOT_FOUND),
-    PERMISSION_GROUP_NOT_EXISTED(1011, "Permission group not existed", HttpStatus.NOT_FOUND),
-    PERMISSION_GROUP_PERMISSION_NOT_EXISTED(1012, "Permission group permission not existed", HttpStatus.NOT_FOUND),
-    ROLE_PERMISSION_GROUP_NOT_EXISTED(1013, "Role permission group not existed", HttpStatus.NOT_FOUND),
+    USER_ROLE_EXISTED(1011, "User role already existed", HttpStatus.CONFLICT),
     INVALID_INPUT(1014, "Permission group name cannot be null or empty", HttpStatus.BAD_REQUEST),
+
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

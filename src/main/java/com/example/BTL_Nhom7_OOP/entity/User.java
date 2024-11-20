@@ -1,6 +1,7 @@
 package com.example.BTL_Nhom7_OOP.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -35,4 +36,7 @@ public class User {
 
     @Column(name = "dob")
     LocalDate dob;
+
+    @OneToMany(mappedBy = "user")
+    List<UserRole> userRoles;
 }
