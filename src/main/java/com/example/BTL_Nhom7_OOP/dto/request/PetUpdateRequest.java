@@ -1,4 +1,4 @@
-package com.example.BTL_Nhom7_OOP.dto;
+package com.example.BTL_Nhom7_OOP.dto.request;
 
 import java.time.LocalDate;
 

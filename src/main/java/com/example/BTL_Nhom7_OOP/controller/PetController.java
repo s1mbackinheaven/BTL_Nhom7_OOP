@@ -1,8 +1,9 @@
 package com.example.BTL_Nhom7_OOP.controller;
 
 
-import com.example.BTL_Nhom7_OOP.dto.*;
-import com.example.BTL_Nhom7_OOP.entity.Customer;
+import com.example.BTL_Nhom7_OOP.dto.request.PetCreationRequest;
+import com.example.BTL_Nhom7_OOP.dto.request.PetUpdateRequest;
+import com.example.BTL_Nhom7_OOP.dto.response.ApiResponse;
 import com.example.BTL_Nhom7_OOP.entity.Pet;
 import com.example.BTL_Nhom7_OOP.service.PetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class PetController {
 
     //Thêm thú cưng mới (của người dùng có id là customerId)
     @PostMapping
-    ApiResponse<Pet> createPet(@PathVariable long customerId,@RequestBody PetCreationRequest request){
+    ApiResponse<Pet> createPet(@PathVariable long customerId, @RequestBody PetCreationRequest request){
         ApiResponse<Pet> apiResponse = new ApiResponse<>();
         apiResponse.setCode(1000);
         apiResponse.setMessage("Thêm thành công");

@@ -1,9 +1,9 @@
 package com.example.BTL_Nhom7_OOP.service;
 
 
-import com.example.BTL_Nhom7_OOP.dto.CustomerUpdateRequest;
+import com.example.BTL_Nhom7_OOP.dto.request.CustomerUpdateRequest;
 import com.example.BTL_Nhom7_OOP.entity.Customer;
-import com.example.BTL_Nhom7_OOP.dto.CustomerCreationRequest;
+import com.example.BTL_Nhom7_OOP.dto.request.CustomerCreationRequest;
 import com.example.BTL_Nhom7_OOP.exception.ResourceNotFoundException;
 import com.example.BTL_Nhom7_OOP.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +27,7 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
     public void deleteCustomer(long customerId){//Xóa khách hàng bằng id
+        customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng"));
         customerRepository.deleteById(customerId);
     }
     public Customer updateCustomer(long customerId, CustomerUpdateRequest request){//Sửa thông tin khách hàng bằng id

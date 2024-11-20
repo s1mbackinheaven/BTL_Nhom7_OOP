@@ -1,9 +1,9 @@
 package com.example.BTL_Nhom7_OOP.controller;
 
 
-import com.example.BTL_Nhom7_OOP.dto.ApiResponse;
-import com.example.BTL_Nhom7_OOP.dto.CustomerCreationRequest;
-import com.example.BTL_Nhom7_OOP.dto.CustomerUpdateRequest;
+import com.example.BTL_Nhom7_OOP.dto.response.ApiResponse;
+import com.example.BTL_Nhom7_OOP.dto.request.CustomerCreationRequest;
+import com.example.BTL_Nhom7_OOP.dto.request.CustomerUpdateRequest;
 import com.example.BTL_Nhom7_OOP.entity.Customer;
 import com.example.BTL_Nhom7_OOP.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;

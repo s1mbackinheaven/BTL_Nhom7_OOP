@@ -1,8 +1,8 @@
-package com.example.BTL_Nhom7_OOP.dto;
+package com.example.BTL_Nhom7_OOP.dto.request;
 
 import java.time.LocalDate;
 
-public class CustomerUpdateRequest {
+public class CustomerCreationRequest {
     private long id;
     private String firstName,lastName,phoneNumber,address,email;
     private LocalDate birthday;

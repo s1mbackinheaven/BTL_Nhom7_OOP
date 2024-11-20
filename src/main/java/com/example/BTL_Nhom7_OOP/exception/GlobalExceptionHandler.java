@@ -1,6 +1,6 @@
 package com.example.BTL_Nhom7_OOP.exception;
 
-import com.example.BTL_Nhom7_OOP.dto.ApiResponse;
+import com.example.BTL_Nhom7_OOP.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

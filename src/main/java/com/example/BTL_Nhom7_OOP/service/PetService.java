@@ -3,8 +3,8 @@ package com.example.BTL_Nhom7_OOP.service;
 
 import com.example.BTL_Nhom7_OOP.entity.Customer;
 import com.example.BTL_Nhom7_OOP.entity.Pet;
-import com.example.BTL_Nhom7_OOP.dto.PetCreationRequest;
-import com.example.BTL_Nhom7_OOP.dto.PetUpdateRequest;
+import com.example.BTL_Nhom7_OOP.dto.request.PetCreationRequest;
+import com.example.BTL_Nhom7_OOP.dto.request.PetUpdateRequest;
 import com.example.BTL_Nhom7_OOP.exception.ResourceNotFoundException;
 import com.example.BTL_Nhom7_OOP.repository.CustomerRepository;
 import com.example.BTL_Nhom7_OOP.repository.PetRepository;
