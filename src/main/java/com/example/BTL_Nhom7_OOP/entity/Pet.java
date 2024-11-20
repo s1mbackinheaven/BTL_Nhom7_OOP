@@ -1,9 +1,6 @@
 package com.example.BTL_Nhom7_OOP.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
@@ -15,6 +12,10 @@ public class Pet {
     private String name,specie;
     private LocalDate birthday;
     private String biography;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     public long getId() {
         return id;
@@ -54,5 +55,13 @@ public class Pet {
 
     public void setBiography(String biography) {
         this.biography = biography;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }
