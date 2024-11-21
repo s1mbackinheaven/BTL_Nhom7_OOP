@@ -14,7 +14,7 @@ public class ArticleResponseDTO {
     private Integer viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private List<CommentResponseDTO> comments; // Thêm danh sách comment
+    private List<CommentResponseDTO> comments;
 
     // Constructor mặc định
     public ArticleResponseDTO() {

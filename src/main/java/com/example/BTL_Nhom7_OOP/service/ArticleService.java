@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,10 +19,6 @@ public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
 
-    /**
-     * Lấy tất cả bài viết dưới dạng ArticleResponseDTO.
-     * @return List<ArticleResponseDTO>
-     */
     @Transactional(readOnly = true)
     public List<ArticleResponseDTO> getAllArticles() {
         return articleRepository.findAll().stream()
@@ -31,11 +26,6 @@ public class ArticleService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Lấy thông tin chi tiết một bài viết theo ID.
-     * @param id ID của bài viết.
-     * @return ArticleResponseDTO
-     */
     @Transactional(readOnly = true)
     public ArticleResponseDTO getArticleById(Long id) {
         return articleRepository.findById(id)
@@ -43,11 +33,6 @@ public class ArticleService {
                 .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
     }
 
-    /**
-     * Tạo mới bài viết.
-     * @param articleRequestDTO Dữ liệu yêu cầu tạo bài viết.
-     * @return ArticleResponseDTO
-     */
     @Transactional
     public ArticleResponseDTO createArticle(ArticleRequestDTO articleRequestDTO) {
         Article article = convertToEntity(articleRequestDTO);
@@ -55,12 +40,6 @@ public class ArticleService {
         return convertToResponseDTO(savedArticle);
     }
 
-    /**
-     * Cập nhật thông tin bài viết.
-     * @param id ID của bài viết cần cập nhật.
-     * @param articleRequestDTO Dữ liệu yêu cầu cập nhật.
-     * @return ArticleResponseDTO
-     */
     @Transactional
     public ArticleResponseDTO updateArticle(Long id, ArticleRequestDTO articleRequestDTO) {
         Article article = articleRepository.findById(id)
@@ -77,10 +56,6 @@ public class ArticleService {
         return convertToResponseDTO(updatedArticle);
     }
 
-    /**
-     * Xóa bài viết theo ID.
-     * @param id ID của bài viết cần xóa.
-     */
     @Transactional
     public void deleteArticle(Long id) {
         if (!articleRepository.existsById(id)) {
@@ -89,11 +64,6 @@ public class ArticleService {
         articleRepository.deleteById(id);
     }
 
-    /**
-     * Chuyển đổi Article entity sang ArticleResponseDTO.
-     * @param article Bài viết entity.
-     * @return ArticleResponseDTO
-     */
     private ArticleResponseDTO convertToResponseDTO(Article article) {
         return new ArticleResponseDTO(
                 article.getId(),
@@ -112,11 +82,6 @@ public class ArticleService {
         );
     }
 
-    /**
-     * Chuyển đổi ArticleRequestDTO sang Article entity.
-     * @param articleRequestDTO Dữ liệu yêu cầu.
-     * @return Article entity.
-     */
     private Article convertToEntity(ArticleRequestDTO articleRequestDTO) {
         Article article = new Article();
         article.setTitle(articleRequestDTO.getTitle());
@@ -128,11 +93,6 @@ public class ArticleService {
         return article;
     }
 
-    /**
-     * Chuyển đổi Comment entity sang CommentResponseDTO.
-     * @param comment Bình luận entity.
-     * @return CommentResponseDTO
-     */
     private CommentResponseDTO convertToCommentResponseDTO(Comment comment) {
         return new CommentResponseDTO(
                 comment.getId(),

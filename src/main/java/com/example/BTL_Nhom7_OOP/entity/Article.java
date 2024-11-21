@@ -1,14 +1,10 @@
 package com.example.BTL_Nhom7_OOP.entity;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +16,6 @@ public class Article {
     private Long id;
 
     @NotNull(message = "Tiêu đề không được để trống")
-    //@Size(max = 200, message = "Tiêu đề không được vượt quá 200 ký tự")
     @Column(nullable = false)
     private String title;
 
@@ -51,7 +46,12 @@ public class Article {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>(); // Khởi tạo danh sách comments
+
+    // Constructor mặc định
     public Article() {
+        this.comments = new ArrayList<>(); // Khởi tạo danh sách comments
     }
 
     // Constructor có tham số
@@ -63,10 +63,8 @@ public class Article {
         this.thumbnailUrl = thumbnailUrl;
         this.viewCount = 0;
         this.isPublished = false;
+        this.comments = new ArrayList<>(); // Khởi tạo danh sách comments
     }
-
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> comments;
 
     // Getter và Setter cho comments
     public List<Comment> getComments() {
@@ -77,7 +75,7 @@ public class Article {
         this.comments = comments;
     }
 
-    // getter và setter
+    // Getter và Setter cho các trường khác
     public Long getId() {
         return id;
     }
@@ -162,15 +160,12 @@ public class Article {
     protected void onCreate() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
-        //System.out.println("Created at: " + createdAt);  // Log giá trị createdAt
     }
 
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
-        //System.out.println("Updated at: " + updatedAt);  // Log giá trị updatedAt
     }
-
 
     public void incrementViewCount() {
         this.viewCount = (this.viewCount == null ? 1 : this.viewCount + 1);
