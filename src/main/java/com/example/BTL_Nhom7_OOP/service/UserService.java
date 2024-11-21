@@ -21,6 +21,7 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -95,9 +96,16 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-//        @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('CUSTOMER')")
     public List<UserResponse> getUsers() {
         log.info("In method get users");
+        // Lấy thông tin authentication hiện tại
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // In ra thông tin chi tiết
+        log.info("Authentication: {}", authentication);
+        log.info("Authorities: {}", authentication.getAuthorities());
+
         return userRepository.findAll()
                 .stream()
                 .map(userMapper::toUserResponse)

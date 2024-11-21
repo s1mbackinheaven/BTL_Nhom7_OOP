@@ -175,7 +175,7 @@ public class AuthenticationService {
                         Instant.now().plus(VALID_DURATION, ChronoUnit.SECONDS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString()) // Lưu token id
-                .claim("scope", buildScope(user)) // scope chứa thông tin về role và permission
+                .claim("scope", buildScope(user)) // scope chứa thông tin về role
                 .build();
         // Tạo payload
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -191,7 +191,7 @@ public class AuthenticationService {
         }
     }
 
-    // Scope chứa thông tin về role và các quyền trong đó
+    // Scope chứa thông tin về role trong đó
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
 
@@ -200,6 +200,9 @@ public class AuthenticationService {
                     .map(userRole -> userRole.getRole().getName())
                     .forEach(stringJoiner::add);
         }
-        return  stringJoiner.toString();
+        String scope = stringJoiner.toString();
+        log.info("Generated Scope: {}", scope);
+
+        return  scope;
     }
 }
