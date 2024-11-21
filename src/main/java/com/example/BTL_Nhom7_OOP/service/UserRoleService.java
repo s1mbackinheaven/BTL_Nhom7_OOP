@@ -1,5 +1,7 @@
 package com.example.BTL_Nhom7_OOP.service;
 
+import com.example.BTL_Nhom7_OOP.dto.request.UserRoleRequest;
+import com.example.BTL_Nhom7_OOP.dto.response.RoleResponse;
 import com.example.BTL_Nhom7_OOP.dto.response.UserRoleResponse;
 import com.example.BTL_Nhom7_OOP.entity.Role;
 import com.example.BTL_Nhom7_OOP.entity.User;
@@ -14,8 +16,11 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +33,7 @@ public class UserRoleService {
     UserRoleMapper userRoleMapper;
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserRoleResponse assignRole(String userId, int roleId) {
         // Kiểm tra User có tồn tại hay không
         User user = userRepository.findById(userId)
@@ -46,6 +52,34 @@ public class UserRoleService {
         return userRoleMapper.toUserRoleResponse(savedUserRole);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<UserRoleResponse> getAll(){
+        return userRoleRepository.findAll()
+                .stream()
+                .map(userRoleMapper::toUserRoleResponse)
+                .toList();
+    }
+
+    // update UserRole (gán lại)
+    @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public UserRoleResponse updateUserRole(int userRoleId, UserRoleRequest userRoleRequest) {
+        UserRole existingUserRole = userRoleRepository.findById(userRoleId)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_ROLE_NOT_EXISTED));
+
+        Role newRole = roleRepository.findById(userRoleRequest.getRoleId())
+                .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+
+        User user = userRepository.findById(userRoleRequest.getUserId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        existingUserRole.setRole(newRole);
+        existingUserRole.setUser(user);
+
+        return userRoleMapper.toUserRoleResponse(userRoleRepository.save(existingUserRole));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUserRole(int userRoleId) {
         userRoleRepository.deleteById(userRoleId);
     }

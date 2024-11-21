@@ -11,6 +11,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/user-roles")
@@ -23,6 +25,20 @@ public class UserRoleController {
     ApiResponse<UserRoleResponse> assignRole(@RequestBody @Valid UserRoleRequest request) {
         return ApiResponse.<UserRoleResponse>builder()
                 .result(userRoleService.assignRole(request.getUserId(), request.getRoleId()))
+                .build();
+    }
+
+    @GetMapping("/get_all_user_role")
+    ApiResponse<List<UserRoleResponse>> getAllUserRole() {
+        return ApiResponse.<List<UserRoleResponse>>builder()
+                .result(userRoleService.getAll())
+                .build();
+    }
+
+    @PutMapping("/reassign_role/{userRoleId}")
+    ApiResponse<UserRoleResponse> updateUserRole(@PathVariable int userRoleId, @RequestBody @Valid UserRoleRequest request) {
+        return ApiResponse.<UserRoleResponse>builder()
+                .result(userRoleService.updateUserRole(userRoleId, request))
                 .build();
     }
 

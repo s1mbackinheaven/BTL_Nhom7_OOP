@@ -18,6 +18,7 @@ public enum ErrorCode {
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     ROLE_NOT_EXISTED(1010, "Role not existed", HttpStatus.NOT_FOUND),
     USER_ROLE_EXISTED(1011, "User role already existed", HttpStatus.CONFLICT),
+    USER_ROLE_NOT_EXISTED(1012, "User role not existed", HttpStatus.NOT_FOUND),
     INVALID_INPUT(1014, "Permission group name cannot be null or empty", HttpStatus.BAD_REQUEST),
 
     ;

@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,17 +25,20 @@ public class RoleService {
     RoleRepository roleRepository;
     RoleMapper roleMapper;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public RoleResponse create(RoleRequest request) {
         Role role = roleMapper.toRole(request);
         role = roleRepository.save(role);
         return roleMapper.toRoleResponse(role);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public RoleResponse findById(int id) {
         return roleMapper.toRoleResponse(roleRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<RoleResponse> getAll(){
         return roleRepository.findAll()
                 .stream()
@@ -43,6 +47,7 @@ public class RoleService {
     }
 
     @Transactional
+    @PreAuthorize("hasAuthority('ADMIN')")
     public RoleResponse update(int roleId, RoleRequest request) {
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
@@ -53,6 +58,7 @@ public class RoleService {
         return roleMapper.toRoleResponse(roleRepository.save(role));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void delete(int roleId){
         roleRepository.deleteById(roleId);
     }

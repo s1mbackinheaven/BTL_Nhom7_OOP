@@ -20,6 +20,7 @@ import lombok.experimental.FieldDefaults;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -69,6 +70,7 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
     // Lấy thông tin của chính mình
+    @PreAuthorize("isAuthenticated()")
     public UserResponse getMyInfo() {
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -80,7 +82,7 @@ public class UserService {
     }
 
     // nếu username của ng đang đăng nhập trùng thì mới trả về
-//    @PostAuthorize("returnObject.username == authentication.name")
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse updateUser(String userId, UserUpdateRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
@@ -91,12 +93,12 @@ public class UserService {
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteUser(String userId) {
         userRepository.deleteById(userId);
     }
 
-    @PreAuthorize("hasAuthority('CUSTOMER')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<UserResponse> getUsers() {
         log.info("In method get users");
         // Lấy thông tin authentication hiện tại
@@ -112,7 +114,7 @@ public class UserService {
                 .toList();
     }
 
-    //    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public UserResponse getUser(String id) {
         return userMapper.toUserResponse(
                 userRepository.findById(id)
