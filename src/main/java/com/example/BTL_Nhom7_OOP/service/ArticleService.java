@@ -1,13 +1,15 @@
 package com.example.BTL_Nhom7_OOP.service;
 
-import com.example.BTL_Nhom7_OOP.dto.ArticleDTO;
+import com.example.BTL_Nhom7_OOP.dto.request.ArticleRequestDTO;
+import com.example.BTL_Nhom7_OOP.dto.response.ArticleResponseDTO;
+import com.example.BTL_Nhom7_OOP.dto.response.CommentResponseDTO;
 import com.example.BTL_Nhom7_OOP.entity.Article;
+import com.example.BTL_Nhom7_OOP.entity.Comment;
 import com.example.BTL_Nhom7_OOP.repository.ArticleRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -18,91 +20,126 @@ public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    /**
+     * Lấy tất cả bài viết dưới dạng ArticleResponseDTO.
+     * @return List<ArticleResponseDTO>
+     */
+    @Transactional(readOnly = true)
+    public List<ArticleResponseDTO> getAllArticles() {
+        return articleRepository.findAll().stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
+    }
 
-    // CREATE: Tạo bài viết mới
-    public ArticleDTO createArticle(ArticleDTO articleDTO) {
-        Article article = modelMapper.map(articleDTO, Article.class);
+    /**
+     * Lấy thông tin chi tiết một bài viết theo ID.
+     * @param id ID của bài viết.
+     * @return ArticleResponseDTO
+     */
+    @Transactional(readOnly = true)
+    public ArticleResponseDTO getArticleById(Long id) {
+        return articleRepository.findById(id)
+                .map(this::convertToResponseDTO)
+                .orElseThrow(() -> new RuntimeException("Article not found with id: " + id));
+    }
+
+    /**
+     * Tạo mới bài viết.
+     * @param articleRequestDTO Dữ liệu yêu cầu tạo bài viết.
+     * @return ArticleResponseDTO
+     */
+    @Transactional
+    public ArticleResponseDTO createArticle(ArticleRequestDTO articleRequestDTO) {
+        Article article = convertToEntity(articleRequestDTO);
         Article savedArticle = articleRepository.save(article);
-        return modelMapper.map(savedArticle, ArticleDTO.class);
+        return convertToResponseDTO(savedArticle);
     }
 
-    // READ: Lấy tất cả bài viết
-    public List<ArticleDTO> getAllArticles() {
-        List<Article> articles = articleRepository.findAllByOrderByCreatedAtDesc();
-        if (articles.isEmpty()) {
-            return Collections.emptyList(); // Trả về danh sách rỗng nếu không có bài viết
-        }
-        return articles.stream()
-                .map(article -> modelMapper.map(article, ArticleDTO.class))
-                .collect(Collectors.toList());
+    /**
+     * Cập nhật thông tin bài viết.
+     * @param id ID của bài viết cần cập nhật.
+     * @param articleRequestDTO Dữ liệu yêu cầu cập nhật.
+     * @return ArticleResponseDTO
+     */
+    @Transactional
+    public ArticleResponseDTO updateArticle(Long id, ArticleRequestDTO articleRequestDTO) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Article not found"));
+
+        article.setTitle(articleRequestDTO.getTitle());
+        article.setContent(articleRequestDTO.getContent());
+        article.setAuthor(articleRequestDTO.getAuthor());
+        article.setCategory(articleRequestDTO.getCategory());
+        article.setThumbnailUrl(articleRequestDTO.getThumbnailUrl());
+        article.setPublished(articleRequestDTO.isPublished());
+
+        Article updatedArticle = articleRepository.save(article);
+        return convertToResponseDTO(updatedArticle);
     }
 
-    // READ: Lấy bài viết theo ID
-    public Optional<ArticleDTO> getArticleById(Long id) {
-        Optional<Article> article = articleRepository.findById(id);
-        return article.map(value -> modelMapper.map(value, ArticleDTO.class));
-    }
-
-    // UPDATE: Cập nhật bài viết
-    public ArticleDTO updateArticle(Long id, ArticleDTO articleDTO) {
-        Optional<Article> article = articleRepository.findById(id);
-        if (article.isPresent()) {
-            Article existingArticle = article.get();
-            existingArticle.setTitle(articleDTO.getTitle());
-            existingArticle.setContent(articleDTO.getContent());
-            existingArticle.setCategory(articleDTO.getCategory());
-            existingArticle.setThumbnailUrl(articleDTO.getThumbnailUrl());
-            existingArticle.setPublished(articleDTO.isPublished());
-            Article updatedArticle = articleRepository.save(existingArticle);
-            return modelMapper.map(updatedArticle, ArticleDTO.class);
-        }
-        return null;
-    }
-
-    // DELETE: Xóa bài viết
+    /**
+     * Xóa bài viết theo ID.
+     * @param id ID của bài viết cần xóa.
+     */
+    @Transactional
     public void deleteArticle(Long id) {
-        Optional<Article> article = articleRepository.findById(id);
-        if (article.isPresent()) {
-            articleRepository.deleteById(id);
-        } else {
-            throw new IllegalArgumentException("Bài viết không tồn tại!");
+        if (!articleRepository.existsById(id)) {
+            throw new RuntimeException("Article not found");
         }
+        articleRepository.deleteById(id);
     }
 
-
-    // Tìm bài viết theo category, chưa dùng đến nhưng có thể cần
-    public List<ArticleDTO> getArticlesByCategory(String category) {
-        List<Article> articles = articleRepository.findByCategory(category);
-        return articles.stream()
-                .map(article -> modelMapper.map(article, ArticleDTO.class))
-                .collect(Collectors.toList());
+    /**
+     * Chuyển đổi Article entity sang ArticleResponseDTO.
+     * @param article Bài viết entity.
+     * @return ArticleResponseDTO
+     */
+    private ArticleResponseDTO convertToResponseDTO(Article article) {
+        return new ArticleResponseDTO(
+                article.getId(),
+                article.getTitle(),
+                article.getContent(),
+                article.getAuthor(),
+                article.getCategory(),
+                article.getThumbnailUrl(),
+                article.isPublished(),
+                article.getViewCount(),
+                article.getCreatedAt(),
+                article.getUpdatedAt(),
+                article.getComments().stream()
+                        .map(this::convertToCommentResponseDTO)
+                        .collect(Collectors.toList())
+        );
     }
 
-    // Tìm kiếm bài viết theo từ khóa trong tiêu đề, chưa dùng đến nhưng có thể cần
-    public List<ArticleDTO> searchArticles(String keyword) {
-        List<Article> articles = articleRepository.findByTitleContainingIgnoreCase(keyword);
-        return articles.stream()
-                .map(article -> modelMapper.map(article, ArticleDTO.class))
-                .collect(Collectors.toList());
+    /**
+     * Chuyển đổi ArticleRequestDTO sang Article entity.
+     * @param articleRequestDTO Dữ liệu yêu cầu.
+     * @return Article entity.
+     */
+    private Article convertToEntity(ArticleRequestDTO articleRequestDTO) {
+        Article article = new Article();
+        article.setTitle(articleRequestDTO.getTitle());
+        article.setContent(articleRequestDTO.getContent());
+        article.setAuthor(articleRequestDTO.getAuthor());
+        article.setCategory(articleRequestDTO.getCategory());
+        article.setThumbnailUrl(articleRequestDTO.getThumbnailUrl());
+        article.setPublished(articleRequestDTO.isPublished());
+        return article;
     }
 
-    // Lấy các bài viết đã xuất bản, chưa dùng đến nhưng có thể cần
-    public List<ArticleDTO> getPublishedArticles() {
-        List<Article> articles = articleRepository.findByIsPublishedTrue();
-        return articles.stream()
-                .map(article -> modelMapper.map(article, ArticleDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    // Tăng số lượt xem bài viết
-    public void incrementViewCount(Long id) {
-        Optional<Article> article = articleRepository.findById(id);
-        if (article.isPresent()) {
-            Article existingArticle = article.get();
-            existingArticle.incrementViewCount();
-            articleRepository.save(existingArticle);
-        }
+    /**
+     * Chuyển đổi Comment entity sang CommentResponseDTO.
+     * @param comment Bình luận entity.
+     * @return CommentResponseDTO
+     */
+    private CommentResponseDTO convertToCommentResponseDTO(Comment comment) {
+        return new CommentResponseDTO(
+                comment.getId(),
+                comment.getContent(),
+                comment.getAuthor(),
+                comment.getCreatedAt(),
+                comment.getArticle().getId()
+        );
     }
 }

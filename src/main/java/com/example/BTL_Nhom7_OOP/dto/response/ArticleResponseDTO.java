@@ -1,10 +1,9 @@
-package com.example.BTL_Nhom7_OOP.dto;
+package com.example.BTL_Nhom7_OOP.dto.response;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import jakarta.validation.constraints.NotNull;
+import java.util.List;
 
-public class ArticleDTO {
+public class ArticleResponseDTO {
     private Long id;
     private String title;
     private String content;
@@ -15,13 +14,14 @@ public class ArticleDTO {
     private Integer viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private List<CommentResponseDTO> comments; // Thêm danh sách comment
 
     // Constructor mặc định
-    public ArticleDTO() {
+    public ArticleResponseDTO() {
     }
 
     // Constructor có tham số
-    public ArticleDTO(Long id, String title, String content, String author, String category, String thumbnailUrl, boolean isPublished, Integer viewCount, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ArticleResponseDTO(Long id, String title, String content, String author, String category, String thumbnailUrl, boolean isPublished, Integer viewCount, LocalDateTime createdAt, LocalDateTime updatedAt, List<CommentResponseDTO> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
@@ -32,9 +32,10 @@ public class ArticleDTO {
         this.viewCount = viewCount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.comments = comments;
     }
 
-    // Thêm các getter và setter
+    //getter và setter
     public Long getId() {
         return id;
     }
@@ -113,5 +114,13 @@ public class ArticleDTO {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<CommentResponseDTO> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentResponseDTO> comments) {
+        this.comments = comments;
     }
 }

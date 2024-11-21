@@ -1,9 +1,9 @@
 package com.example.BTL_Nhom7_OOP.service;
 
-import com.example.BTL_Nhom7_OOP.dto.FeedbackDTO;
+import com.example.BTL_Nhom7_OOP.dto.request.FeedbackRequestDTO;
+import com.example.BTL_Nhom7_OOP.dto.response.FeedbackResponseDTO;
 import com.example.BTL_Nhom7_OOP.entity.Feedback;
 import com.example.BTL_Nhom7_OOP.repository.FeedbackRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,69 +13,60 @@ import java.util.stream.Collectors;
 
 @Service
 public class FeedbackService {
+
     @Autowired
     private FeedbackRepository feedbackRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    public List<FeedbackResponseDTO> getAllFeedbacks() {
+        return feedbackRepository.findAll().stream()
+                .map(this::convertToResponseDTO)
+                .collect(Collectors.toList());
+    }
 
-    // CREATE: Tạo fb mới
-    public FeedbackDTO createFeedback(FeedbackDTO feedbackDTO) {
-        Feedback feedback = modelMapper.map(feedbackDTO, Feedback.class);
+    public Optional<FeedbackResponseDTO> getFeedbackById(Long id) {
+        return feedbackRepository.findById(id).map(this::convertToResponseDTO);
+    }
+
+    public FeedbackResponseDTO createFeedback(FeedbackRequestDTO feedbackRequestDTO) {
+        Feedback feedback = convertToEntity(feedbackRequestDTO);
         Feedback savedFeedback = feedbackRepository.save(feedback);
-        return modelMapper.map(savedFeedback, FeedbackDTO.class);
+        return convertToResponseDTO(savedFeedback);
     }
 
-    // READ: Lấy tất cả fb
-    public List<FeedbackDTO> getAllFeedbacks() {
-        List<Feedback> feedbacks = feedbackRepository.findAll();
-        return feedbacks.stream()
-                .map(feedback -> modelMapper.map(feedback, FeedbackDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    // READ: Lấy fb theo ID
-    public FeedbackDTO getFeedbackById(Long id) {
-        Optional<Feedback> feedback = feedbackRepository.findById(id);
-        return feedback.map(value -> modelMapper.map(value, FeedbackDTO.class)).orElse(null);
-    }
-
-    // READ: Lấy các fb đã được duyệt
-    public List<FeedbackDTO> getApprovedFeedbacks() {
-        List<Feedback> feedbacks = feedbackRepository.findByApproved(true);
-        return feedbacks.stream()
-                .map(feedback -> modelMapper.map(feedback, FeedbackDTO.class))
-                .collect(Collectors.toList());
-    }
-
-    // UPDATE: Cập nhật fb
-    public FeedbackDTO updateFeedback(Long id, FeedbackDTO feedbackDTO) {
-        Optional<Feedback> feedback = feedbackRepository.findById(id);
-        if (feedback.isPresent()) {
-            Feedback existingFeedback = feedback.get();
-            existingFeedback.setUsername(feedbackDTO.getUsername());
-            existingFeedback.setComment(feedbackDTO.getComment());
-            existingFeedback.setRating(feedbackDTO.getRating());
-            existingFeedback.setApproved(feedbackDTO.isApproved());
-            Feedback updatedFeedback = feedbackRepository.save(existingFeedback);
-            return modelMapper.map(updatedFeedback, FeedbackDTO.class);
+    public FeedbackResponseDTO updateFeedback(Long id, FeedbackRequestDTO feedbackRequestDTO) {
+        Optional<Feedback> existingFeedbackOpt = feedbackRepository.findById(id);
+        if (existingFeedbackOpt.isPresent()) {
+            Feedback existingFeedback = existingFeedbackOpt.get();
+            existingFeedback.setUsername(feedbackRequestDTO.getUsername());
+            existingFeedback.setComment(feedbackRequestDTO.getComment());
+            existingFeedback.setRating(feedbackRequestDTO.getRating());
+            Feedback savedFeedback = feedbackRepository.save(existingFeedback);
+            return convertToResponseDTO(savedFeedback);
         }
         return null;
     }
 
-
-    // APPROVE: Duyệt fb
-    public void approveFeedback(Long id) {
-        Optional<Feedback> feedback = feedbackRepository.findById(id);
-        if (feedback.isPresent()) {
-            Feedback existingFeedback = feedback.get();
-            existingFeedback.setApproved(true);
-            feedbackRepository.save(existingFeedback);
-        }
-    }
-
-    // DELETE: Xóa fb
     public void deleteFeedback(Long id) {
         feedbackRepository.deleteById(id);
+    }
+
+    private FeedbackResponseDTO convertToResponseDTO(Feedback feedback) {
+        return new FeedbackResponseDTO(
+                feedback.getId(),
+                feedback.getUsername(),
+                feedback.getComment(),
+                feedback.getRating(),
+                feedback.isApproved(),
+                feedback.getCreatedAt(),
+                feedback.getUpdatedAt()
+        );
+    }
+
+    private Feedback convertToEntity(FeedbackRequestDTO feedbackRequestDTO) {
+        return new Feedback(
+                feedbackRequestDTO.getUsername(),
+                feedbackRequestDTO.getComment(),
+                feedbackRequestDTO.getRating()
+        );
     }
 }

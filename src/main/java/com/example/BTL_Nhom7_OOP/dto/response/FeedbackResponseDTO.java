@@ -1,8 +1,8 @@
-package com.example.BTL_Nhom7_OOP.dto;
+package com.example.BTL_Nhom7_OOP.dto.response;
 
 import java.time.LocalDateTime;
 
-public class FeedbackDTO {
+public class FeedbackResponseDTO {
     private Long id;
     private String username;
     private String comment;
@@ -10,6 +10,30 @@ public class FeedbackDTO {
     private boolean approved;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    // Constructor mặc định
+    public FeedbackResponseDTO() {
+    }
+
+    // Constructor có tham số
+    public FeedbackResponseDTO(Long id, String username, String comment, int rating, boolean approved, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.username = username;
+        this.comment = comment;
+        this.rating = rating;
+        this.approved = approved;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    // Getter và Setter
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;
@@ -25,14 +49,6 @@ public class FeedbackDTO {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public int getRating() {

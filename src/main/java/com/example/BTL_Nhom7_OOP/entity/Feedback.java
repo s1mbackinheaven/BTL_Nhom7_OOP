@@ -1,43 +1,41 @@
 package com.example.BTL_Nhom7_OOP.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 
-// đánh giá của khách hàng
 @Entity
+@Table(name = "feedbacks")
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(min = 1, max = 255)
     private String username;
-
-    @NotNull
-    @Size(min = 1, max = 1000)
     private String comment;
-
-    @NotNull
     private int rating;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
     private boolean approved;
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    // Constructor mặc định
+    public Feedback() {
     }
 
-    @PreUpdate
-    protected void onUpdate() {
+    // Constructor có tham số
+    public Feedback(String username, String comment, int rating) {
+        this.username = username;
+        this.comment = comment;
+        this.rating = rating;
+        this.approved = false;
+        this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
+    // Getter và Setter
     public Long getId() {
         return id;
     }
@@ -70,6 +68,14 @@ public class Feedback {
         this.rating = rating;
     }
 
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -78,11 +84,11 @@ public class Feedback {
         this.createdAt = createdAt;
     }
 
-    public boolean isApproved() {
-        return approved;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setApproved(boolean approved) {
-        this.approved = approved;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
