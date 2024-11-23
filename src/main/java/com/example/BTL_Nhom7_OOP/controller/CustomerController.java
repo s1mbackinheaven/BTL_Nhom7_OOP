@@ -16,6 +16,7 @@ import java.util.List;
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
+
     //Thêm khách hàng mới
     @PostMapping
     ApiResponse<Customer> createCustomer(@RequestBody CustomerCreationRequest request){
@@ -25,16 +26,19 @@ public class CustomerController {
         apiResponse.setResult(customerService.createCustomer(request));
         return apiResponse;
     }
+
     //Liệt kê thông tin tất cả khách hàng
     @GetMapping("/get_all_customer")
     List<Customer> getCustomers(){
         return customerService.getCustomers();
     }
+
     //Lấy ra thông tin khách hàng bằng id
     @GetMapping("/get_customer/{customerId}")
     Customer getCustomer(@PathVariable("customerId") long customerId){
         return customerService.getCustomer(customerId);
     }
+
     //Sửa thông tin khách hàng bằng id
     @PutMapping("/update_infor_customer/{customerId}")
     ApiResponse<Customer> updateCustomer(@PathVariable long customerId, @RequestBody CustomerUpdateRequest request){
@@ -44,6 +48,7 @@ public class CustomerController {
         apiResponse.setResult(customerService.updateCustomer(customerId,request));
         return apiResponse;
     }
+
     //Xóa khách hàng bằng id
     @DeleteMapping("/delete_customer/{customerId}")
     String deleteCustomer(@PathVariable long customerId){

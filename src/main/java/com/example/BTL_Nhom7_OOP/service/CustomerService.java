@@ -15,7 +15,9 @@ import java.util.List;
 public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
-    public Customer createCustomer(CustomerCreationRequest request){//Thêm khách hàng mới
+
+    //Thêm khách hàng mới
+    public Customer createCustomer(CustomerCreationRequest request){
         Customer customer;
         customer=new Customer();
         customer.setFirstName(request.getFirstName());
@@ -26,11 +28,20 @@ public class CustomerService {
         customer.setBirthday(request.getBirthday());
         return customerRepository.save(customer);
     }
-    public void deleteCustomer(long customerId){//Xóa khách hàng bằng id
-        customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng"));
-        customerRepository.deleteById(customerId);
+
+    //Liệt kê thông tin tất cả khách hàng
+    public List<Customer> getCustomers(){
+        if(customerRepository.findAll().isEmpty()) throw new ResourceNotFoundException("Không có khách hàng nào");
+        return customerRepository.findAll();
     }
-    public Customer updateCustomer(long customerId, CustomerUpdateRequest request){//Sửa thông tin khách hàng bằng id
+
+    //Lấy ra thông tin khách hàng bằng id
+    public Customer getCustomer(long id){
+        return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng"));
+    }
+
+    //Sửa thông tin khách hàng bằng id
+    public Customer updateCustomer(long customerId, CustomerUpdateRequest request){
         Customer customer=getCustomer(customerId);
         customer.setFirstName(request.getFirstName());
         customer.setLastName(request.getLastName());
@@ -40,11 +51,11 @@ public class CustomerService {
         customer.setBirthday(request.getBirthday());
         return customerRepository.save(customer);
     }
-    public List<Customer> getCustomers(){//Liệt kê thông tin tất cả khách hàng
-        if(customerRepository.findAll().isEmpty()) throw new ResourceNotFoundException("Không có khách hàng nào");
-        return customerRepository.findAll();
+
+    //Xóa khách hàng bằng id
+    public void deleteCustomer(long customerId){
+        customerRepository.findById(customerId).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng"));
+        customerRepository.deleteById(customerId);
     }
-    public Customer getCustomer(long id){//Lấy ra thông tin khách hàng bằng id
-        return customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy khách hàng"));
-    }
+
 }
