@@ -4,6 +4,7 @@ import com.example.BTL_Nhom7_OOP.entity.Doctor;
 import com.example.BTL_Nhom7_OOP.exception.ResourceNotFoundException;
 import com.example.BTL_Nhom7_OOP.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,15 +15,18 @@ public class DoctorService {
     @Autowired
     private DoctorRepository doctorRepository;
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Doctor createDoctor(Doctor doctor) {
         return doctorRepository.save(doctor);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Doctor getDoctorById(int id) {
         return doctorRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy Bác Sĩ"));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Doctor> getAllDoctors() {
         List<Doctor> doctors = doctorRepository.findAll();
         if (doctors.isEmpty()) {
@@ -31,6 +35,7 @@ public class DoctorService {
         return doctors;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Doctor updateInforDoctor(int id, Doctor newDoctor) {
         Doctor doctor = getDoctorById(id);
         doctor.setName(newDoctor.getName());
@@ -40,12 +45,14 @@ public class DoctorService {
         return doctorRepository.save(doctor);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Doctor setStatusDoctor(int id, Doctor newDoctor) {
         Doctor doctor = getDoctorById(id);
         doctor.setStatus(newDoctor.getStatus());
         return doctorRepository.save(doctor);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteDoctor(int id) {
         Doctor doctor = getDoctorById(id);
         doctorRepository.delete(doctor);

@@ -5,6 +5,7 @@ import com.example.BTL_Nhom7_OOP.entity.Appointment;
 import com.example.BTL_Nhom7_OOP.exception.ResourceNotFoundException;
 import com.example.BTL_Nhom7_OOP.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,18 +25,21 @@ public class AppointmentService {
     private DoctorService doctorService;
 
     //đặt lịch hẹn
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Appointment createAppointment(Appointment appointment) {
         appointment.setStatus("Scheduled");
         return appointmentRepository.save(appointment);
     }
 
     //Tìm lịch theo id
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Appointment getAppointment(int id) {
         return appointmentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Không thấy lịch đặt"));
     }
 
     //lấy danh sách các cuộc hẹn đã đặt
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Appointment> getAllAppointments() {
         List<Appointment> appointments = appointmentRepository.findAll();
         if (appointments.isEmpty()) {
@@ -45,6 +49,7 @@ public class AppointmentService {
     }
 
     //lấy danh sách các cuộc hẹn đã đặt theo tên
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AppointmentDTO> getAllAppointmentsByName(String name) {
         List<Appointment> appointments = appointmentRepository.findAllByOwnerName(name);
         if (appointments.isEmpty()) {
@@ -54,6 +59,7 @@ public class AppointmentService {
     }
 
     //lấy danh sách các cuộc hẹn đã đặt theo ngày
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<AppointmentDTO> getAllAppointmentsByDate(String date) {
         LocalDateTime selectedDate = (date != null) ? LocalDateTime.parse(date) : LocalDateTime.now();
         List<Appointment> appointments = appointmentRepository.findAllByAppointmentDateTime(selectedDate);
@@ -62,6 +68,7 @@ public class AppointmentService {
     }
 
     //lễ tân check in
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Appointment checkInAppointment(int appointmentId) {
         Appointment appointment = appointmentRepository.findById(appointmentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Không tìm thấy cuộc hẹn với ID: " + appointmentId));
@@ -85,6 +92,7 @@ public class AppointmentService {
     }
 
     // Lấy hồ sơ tiếp theo cho bác sĩ từ hàng đợi
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Appointment getNextAppointmentForDoctor(int doctorId) {
         loadAppointmentsToQueue();
         Integer appointmentId = appointmentQueue.poll(); // Lấy ID đầu tiên trong hàng đợi
@@ -102,6 +110,7 @@ public class AppointmentService {
     }
 
     // Khi bác sĩ hoàn thành xử lý
+    @PreAuthorize("hasAuthority('ADMIN')")
     public void completeAppointment(int appointmentId) {
         Appointment appointment = getAppointment(appointmentId);
 
@@ -110,6 +119,7 @@ public class AppointmentService {
     }
 
     //Lấy danh sách tất cả các cuộc hẹn đã hoàn thành thăm khám
+    @PreAuthorize("hasAuthority('ADMIN')")
     public List<Appointment> getAllAppointmentsCompleted() {
         return appointmentRepository.findAllByStatus("Completed");
     }
