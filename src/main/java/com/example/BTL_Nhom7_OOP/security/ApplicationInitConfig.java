@@ -63,9 +63,8 @@ public class   ApplicationInitConfig {
                 User adminUser = new User();
                 adminUser.setUsername(ADMIN_USER_NAME);
                 adminUser.setPassword(passwordEncoder.encode(ADMIN_PASSWORD));
-                adminUser.setFirstName("Admin");
-                adminUser.setLastName("Admin");
-                adminUser.setDob(LocalDate.now());
+                adminUser.setPhoneNumber("0321333898");
+                adminUser.setGender("Male");
 
                 // Lưu user và gán roles
                 User savedUser = userRepository.save(adminUser);
