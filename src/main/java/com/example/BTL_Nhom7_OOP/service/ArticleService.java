@@ -48,9 +48,6 @@ public class ArticleService {
         article.setTitle(articleRequestDTO.getTitle());
         article.setContent(articleRequestDTO.getContent());
         article.setAuthor(articleRequestDTO.getAuthor());
-        article.setCategory(articleRequestDTO.getCategory());
-        article.setThumbnailUrl(articleRequestDTO.getThumbnailUrl());
-        article.setPublished(articleRequestDTO.isPublished());
 
         Article updatedArticle = articleRepository.save(article);
         return convertToResponseDTO(updatedArticle);
@@ -70,10 +67,6 @@ public class ArticleService {
                 article.getTitle(),
                 article.getContent(),
                 article.getAuthor(),
-                article.getCategory(),
-                article.getThumbnailUrl(),
-                article.isPublished(),
-                article.getViewCount(),
                 article.getCreatedAt(),
                 article.getUpdatedAt(),
                 article.getComments().stream()
@@ -87,9 +80,6 @@ public class ArticleService {
         article.setTitle(articleRequestDTO.getTitle());
         article.setContent(articleRequestDTO.getContent());
         article.setAuthor(articleRequestDTO.getAuthor());
-        article.setCategory(articleRequestDTO.getCategory());
-        article.setThumbnailUrl(articleRequestDTO.getThumbnailUrl());
-        article.setPublished(articleRequestDTO.isPublished());
         return article;
     }
 

@@ -26,18 +26,6 @@ public class Article {
     @Column(length = 100)
     private String author;
 
-    @Column(name = "category")
-    private String category;
-
-    @Column(name = "thumbnail_url")
-    private String thumbnailUrl;
-
-    @Column(name = "is_published")
-    private boolean isPublished = false;
-
-    @Column(name = "view_count")
-    private Integer viewCount = 0;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
@@ -55,14 +43,10 @@ public class Article {
     }
 
     // Constructor có tham số
-    public Article(String title, String content, String author, String category, String thumbnailUrl) {
+    public Article(String title, String content, String author) {
         this.title = title;
         this.content = content;
         this.author = author;
-        this.category = category;
-        this.thumbnailUrl = thumbnailUrl;
-        this.viewCount = 0;
-        this.isPublished = false;
         this.comments = new ArrayList<>(); // Khởi tạo danh sách comments
     }
 
@@ -108,38 +92,6 @@ public class Article {
         this.author = author;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
-    }
-
-    public boolean isPublished() {
-        return isPublished;
-    }
-
-    public void setPublished(boolean published) {
-        isPublished = published;
-    }
-
-    public Integer getViewCount() {
-        return viewCount;
-    }
-
-    public void setViewCount(Integer viewCount) {
-        this.viewCount = viewCount;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -167,10 +119,6 @@ public class Article {
         updatedAt = LocalDateTime.now();
     }
 
-    public void incrementViewCount() {
-        this.viewCount = (this.viewCount == null ? 1 : this.viewCount + 1);
-    }
-
     @Override
     public String toString() {
         return "Article{" +
@@ -178,10 +126,6 @@ public class Article {
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", author='" + author + '\'' +
-                ", category='" + category + '\'' +
-                ", thumbnailUrl='" + thumbnailUrl + '\'' +
-                ", isPublished=" + isPublished +
-                ", viewCount=" + viewCount +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

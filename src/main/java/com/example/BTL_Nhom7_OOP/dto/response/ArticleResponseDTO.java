@@ -8,10 +8,6 @@ public class ArticleResponseDTO {
     private String title;
     private String content;
     private String author;
-    private String category;
-    private String thumbnailUrl;
-    private boolean isPublished;
-    private Integer viewCount;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<CommentResponseDTO> comments;
@@ -21,15 +17,11 @@ public class ArticleResponseDTO {
     }
 
     // Constructor có tham số
-    public ArticleResponseDTO(Long id, String title, String content, String author, String category, String thumbnailUrl, boolean isPublished, Integer viewCount, LocalDateTime createdAt, LocalDateTime updatedAt, List<CommentResponseDTO> comments) {
+    public ArticleResponseDTO(Long id, String title, String content, String author, LocalDateTime createdAt, LocalDateTime updatedAt, List<CommentResponseDTO> comments) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.author = author;
-        this.category = category;
-        this.thumbnailUrl = thumbnailUrl;
-        this.isPublished = isPublished;
-        this.viewCount = viewCount;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.comments = comments;
@@ -66,38 +58,6 @@ public class ArticleResponseDTO {
 
     public void setAuthor(String author) {
         this.author = author;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getThumbnailUrl() {
-        return thumbnailUrl;
-    }
-
-    public void setThumbnailUrl(String thumbnailUrl) {
-        this.thumbnailUrl = thumbnailUrl;
-    }
-
-    public boolean isPublished() {
-        return isPublished;
-    }
-
-    public void setPublished(boolean published) {
-        isPublished = published;
-    }
-
-    public Integer getViewCount() {
-        return viewCount;
-    }
-
-    public void setViewCount(Integer viewCount) {
-        this.viewCount = viewCount;
     }
 
     public LocalDateTime getCreatedAt() {

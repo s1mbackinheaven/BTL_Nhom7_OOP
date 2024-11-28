@@ -47,7 +47,6 @@ public class ArticleController {
         }
     }
 
-
     // Cập nhật bài viết
     @PutMapping("/update_article/{id}")
     public ResponseEntity<?> updateArticle(@PathVariable Long id, @Valid @RequestBody ArticleRequestDTO articleRequestDTO, BindingResult result) {
