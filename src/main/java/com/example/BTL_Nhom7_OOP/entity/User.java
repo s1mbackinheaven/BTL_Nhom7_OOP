@@ -1,6 +1,5 @@
 package com.example.BTL_Nhom7_OOP.entity;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -22,20 +21,17 @@ public class User {
     @Column(name = "id")
     String id;
 
-    @Column(name = "username", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8m4_unicode_ci")
+    @Column(name = "username", unique = true)
     String username;
 
     @Column(name = "password")
     String password;
 
-    @Column(name = "first_name")
-    String firstName;
+    @Column(name = "phone_number")
+    String phoneNumber;
 
-    @Column(name = "last_name")
-    String lastName;
-
-    @Column(name = "dob")
-    LocalDate dob;
+    @Column(name = "gender")
+    String gender;
 
     @OneToMany(mappedBy = "user")
     List<UserRole> userRoles;

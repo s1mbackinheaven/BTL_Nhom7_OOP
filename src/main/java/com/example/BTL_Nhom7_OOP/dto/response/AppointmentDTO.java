@@ -12,7 +12,7 @@ public class AppointmentDTO {
     private String petName;
     private Integer petAge;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+//    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime appointmentDateTime;
 
     private String nickname;
