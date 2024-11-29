@@ -88,7 +88,7 @@ public class AppointmentController {
     }
 
     //bác sĩ lấy hồ sơ
-    @PutMapping("/get_appointment_for_doctor/{id}")
+    @GetMapping("/get_appointment_for_doctor/{id}")
     public ResponseEntity<AppointmentDTO> getNextAppointmentForDoctor(@PathVariable int id) {
         try {
             Appointment appointment = appointmentService.getNextAppointmentForDoctor(id);
@@ -103,9 +103,9 @@ public class AppointmentController {
 
     //Bác sĩ hoàn thành hồ sơ
     @PutMapping("/commpleted_appointment/{id}")
-    public ResponseEntity<String> completeAppointment(@PathVariable int appointmentId) {
+    public ResponseEntity<String> completeAppointment(@PathVariable int id) {
         try {
-            appointmentService.completeAppointment(appointmentId);
+            appointmentService.completeAppointment(id);
             return ResponseEntity.ok("Hồ sơ đã được hoàn tất thành công.");
         } catch (ResourceNotFoundException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());

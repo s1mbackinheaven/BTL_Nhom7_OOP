@@ -29,6 +29,12 @@ public class ArticleController {
         return ResponseEntity.ok(ArticleDTO.fromArticle(createdArticle));
     }
 
+    @GetMapping("/get_article_by_id/{id}")
+    public ResponseEntity<ArticleDTO> getArticleById(@PathVariable int id) {
+        Article article = articleService.getArticleById(id);
+        return ResponseEntity.ok(ArticleDTO.fromArticle(article));
+    }
+
     @GetMapping("/get_all_article")
     public ResponseEntity<List<ArticleDTO>> getAllArticle() {
         List<Article> articles = articleService.getAllArticles();

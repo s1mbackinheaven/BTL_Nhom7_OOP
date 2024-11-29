@@ -19,8 +19,9 @@ public class AppointmentDTO {
     private String note;
     private String status;
     private DoctorDTO preferredDoctor;
+    private DoctorDTO doctor;
 
-    public AppointmentDTO(int id, String ownerName, String petName, Integer petAge, LocalDateTime appointmentDateTime, String nickname, String note, String status, DoctorDTO preferredDoctor) {
+    public AppointmentDTO(int id, String ownerName, String petName, Integer petAge, LocalDateTime appointmentDateTime, String nickname, String note, String status, DoctorDTO preferredDoctor, DoctorDTO doctor) {
         this.id = id;
         this.ownerName = ownerName;
         this.petName = petName;
@@ -30,6 +31,7 @@ public class AppointmentDTO {
         this.note = note;
         this.status = status;
         this.preferredDoctor = preferredDoctor;
+        this.doctor = doctor;
     }
 
     public int getId() {
@@ -104,6 +106,14 @@ public class AppointmentDTO {
         this.preferredDoctor = preferredDoctor;
     }
 
+    public DoctorDTO getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(DoctorDTO doctor) {
+        this.doctor = doctor;
+    }
+
     public static AppointmentDTO fromEntity(Appointment appointment) {
         return new AppointmentDTO(
                 appointment.getId(),
@@ -115,7 +125,8 @@ public class AppointmentDTO {
                 appointment.getNote(),
                 appointment.getStatus(),
 //                DoctorDTO.fromEntity(appointment.getPreferredDoctor())
-                appointment.getPreferredDoctor() != null ? DoctorDTO.fromEntity(appointment.getPreferredDoctor()) : null // Kiểm tra null
+                appointment.getPreferredDoctor() != null ? DoctorDTO.fromEntity(appointment.getPreferredDoctor()) : null, // Kiểm tra null
+                appointment.getDoctor() != null ? DoctorDTO.fromEntity(appointment.getDoctor()) : null
         );
     }
 }

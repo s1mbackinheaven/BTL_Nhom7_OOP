@@ -46,9 +46,9 @@ public class DoctorService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public Doctor setStatusDoctor(int id, Doctor newDoctor) {
+    public Doctor setStatusDoctor(int id, String status) {
         Doctor doctor = getDoctorById(id);
-        doctor.setStatus(newDoctor.getStatus());
+        doctor.setStatus(status);
         return doctorRepository.save(doctor);
     }
 

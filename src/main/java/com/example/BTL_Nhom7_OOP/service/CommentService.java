@@ -28,12 +28,8 @@ public class CommentService {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Comment> getAllComments() {
-        List<Comment> comments = commentRepository.findAll();
-        if (comments.isEmpty()) {
-            throw new ResourceNotFoundException("Không tìm thấy");
-        }
-        return comments;
+    public List<Comment> getAllCommentsByArticleId(int id) {
+        return commentRepository.findByArticleId(id);
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

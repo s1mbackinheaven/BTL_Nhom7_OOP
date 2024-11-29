@@ -56,11 +56,9 @@ public class DoctorController {
         return ResponseEntity.ok(DoctorDTO.fromEntity(newDoctor));
     }
 
-    @PutMapping("/set_status_doctor/{id}")
-    public ResponseEntity<DoctorDTO> setDoctorStatus(@PathVariable int id, @RequestBody DoctorRequest doctorRequest) {
-        Doctor doctor = new Doctor();
-        doctor.setStatus(doctorRequest.getStatus());
-        Doctor newDoctor = doctorService.setStatusDoctor(id, doctor);
+    @PutMapping("/set_status_doctor/{id}/{status}")
+    public ResponseEntity<DoctorDTO> setDoctorStatus(@PathVariable int id, @PathVariable String status) {
+        Doctor newDoctor = doctorService.setStatusDoctor(id, status);
         return ResponseEntity.ok(DoctorDTO.fromEntity(newDoctor));
     }
 

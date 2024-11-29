@@ -28,9 +28,9 @@ public class CommentController {
         return ResponseEntity.ok(CommentDTO.fromEntity(createdComment));
     }
 
-    @GetMapping
-    public ResponseEntity<List<CommentDTO>> getAllComments() {
-        List<Comment> comments = commentService.getAllComments();
+    @GetMapping("/get_all_comment_by_articleId/{id}")
+    public ResponseEntity<List<CommentDTO>> getAllCommentsByArticleId(@PathVariable int id) {
+        List<Comment> comments = commentService.getAllCommentsByArticleId(id);
         List<CommentDTO> commentDTOS = new ArrayList<>();
         for (Comment comment : comments) {
             commentDTOS.add(CommentDTO.fromEntity(comment));

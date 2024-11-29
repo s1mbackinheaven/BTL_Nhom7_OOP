@@ -2,6 +2,7 @@ package com.example.BTL_Nhom7_OOP.service;
 
 import com.example.BTL_Nhom7_OOP.dto.response.AppointmentDTO;
 import com.example.BTL_Nhom7_OOP.entity.Appointment;
+import com.example.BTL_Nhom7_OOP.entity.Doctor;
 import com.example.BTL_Nhom7_OOP.exception.ResourceNotFoundException;
 import com.example.BTL_Nhom7_OOP.repository.AppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,6 +95,10 @@ public class AppointmentService {
     // Lấy hồ sơ tiếp theo cho bác sĩ từ hàng đợi
     @PreAuthorize("hasAuthority('ADMIN')")
     public Appointment getNextAppointmentForDoctor(int doctorId) {
+        Doctor doctor = doctorService.getDoctorById(doctorId);
+        if (!"Free".equals(doctor.getStatus())) {
+            throw new ResourceNotFoundException("Không có bác sĩ nào rảnh");
+        }
         loadAppointmentsToQueue();
         Integer appointmentId = appointmentQueue.poll(); // Lấy ID đầu tiên trong hàng đợi
         if (appointmentId == null) {
@@ -105,7 +110,8 @@ public class AppointmentService {
 
         // Cập nhật trạng thái và gắn bác sĩ xử lý
         appointment.setStatus("In Progress");
-        appointment.setDoctor(doctorService.getDoctorById(doctorId));
+        doctor.setStatus("Busy");
+        appointment.setDoctor(doctor);
         return appointmentRepository.save(appointment);
     }
 
@@ -113,8 +119,9 @@ public class AppointmentService {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void completeAppointment(int appointmentId) {
         Appointment appointment = getAppointment(appointmentId);
-
         appointment.setStatus("Completed");
+        Doctor doctor = doctorService.getDoctorById(appointment.getDoctor().getId());
+        doctor.setStatus("Free");
         appointmentRepository.save(appointment);
     }
 

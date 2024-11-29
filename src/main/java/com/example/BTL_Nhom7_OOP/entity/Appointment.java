@@ -16,7 +16,7 @@ public class Appointment {
     private String petName;
     private Integer petAge;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+//    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDateTime appointmentDateTime;
 
     private String nickname;
@@ -24,11 +24,11 @@ public class Appointment {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "doctor_id", nullable = true)
+    @JoinColumn(name = "doctor", nullable = true)
     private Doctor doctor;
 
     @ManyToOne
-    @JoinColumn(name = "preferred_doctor_id", nullable = true)  // Đây là bác sĩ ưu tiên nếu có
+    @JoinColumn(name = "preferred_doctor", nullable = true)  // Đây là bác sĩ ưu tiên nếu có
     private Doctor preferredDoctor;
 
     public Appointment() {
